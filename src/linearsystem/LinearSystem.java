@@ -20,8 +20,6 @@ public class LinearSystem {
 	}
 	
 	
-	
-	
 	//linear system methods
 	public List<Fraction> gaussElimination(){
 		List<Fraction> results = new ArrayList<Fraction>();
@@ -88,6 +86,14 @@ public class LinearSystem {
 		for(int i = 0; i < originalList.size(); i++) {
 			system.add(originalList.get(i));
 		}
+		return results;
+	}
+	
+	public List<Double> gaussJacobi(double error, List<Double> initialAprox){
+		List<Double> results = new ArrayList<Double>();
+		
+		
+		
 		return results;
 	}
 	
