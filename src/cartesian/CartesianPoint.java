@@ -30,15 +30,11 @@ public class CartesianPoint {
 		this.y = y;
 	}
 	
-	public double distanceTo(CartesianPoint p) {
-		double dist;
-		
-		dist = Math.sqrt((
+	public double distanceTo(CartesianPoint p) {		
+		return Math.sqrt((
 				Math.pow((p.getX() - this.x), 2) + 
 				Math.pow((p.getY() - this.y), 2)
-				));
-		
-		return dist;
+				));		
 	}
 	
 }
