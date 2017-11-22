@@ -6,6 +6,9 @@ import java.util.List;
 import cartesian.CartesianPoint;
 import fraction.Fraction;
 import linearsystem.LinearSystem;
+import numeric_basis.BinaryNumber;
+import numeric_basis.HexaNumber;
+import numeric_basis.OctalNumber;
 
 public class Main {
 
@@ -39,10 +42,14 @@ public class Main {
 			System.out.println(d);
 		}
 		
-		CartesianPoint p1 = new CartesianPoint(-2, 3);
-		double dist = p1.distanceTo(new CartesianPoint(-5, -9));
+		CartesianPoint p1 = new CartesianPoint(2, 3);
+		double dist = p1.distanceTo(new CartesianPoint(5, 12));
 		
 		System.out.println("dist = " + dist);
+		
+		HexaNumber b = new HexaNumber();
+		b.fromDecimal(1729);
+		System.out.println("b is " + b.getValue());
 	}
 
 }
