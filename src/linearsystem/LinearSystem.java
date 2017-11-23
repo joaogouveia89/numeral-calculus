@@ -148,6 +148,73 @@ public class LinearSystem {
 		return results;
 	}
 	
+	public List<Double> gaussSeidel(double error, List<Double> initialAprox){
+		List<Double> results = new ArrayList<Double>();
+		Double greattestDiff = null;
+		Double greattestElement = null;
+		double currentError;
+		if(divergenceCriterion()) {
+			for(Double d : initialAprox) {
+				results.add(d);
+			}
+			List<Double> doubleSystem = new ArrayList<Double>();
+			
+			for(Fraction f : system) {
+				doubleSystem.add(f.toDouble());
+			}
+			
+			
+			do {
+				greattestDiff = null;
+				greattestElement = null;
+				for(int i = 0 ; i < getNumberOfVariables(); i++) {
+					double res = doubleSystem.get(getElement(i, getNumberOfVariables()));
+					for(int j = 0; j <= getNumberOfVariables() - 1; j++) {
+						if(j != i) {
+							//this line is the only difference between this method and the gauss-jacobi one
+							//it uses the new calculate values instead of using the old ones
+							if(j > i) {
+								res = res - (doubleSystem.get(getElement(i, j)) * initialAprox.get(j));
+							}else {
+								res = res - (doubleSystem.get(getElement(i, j)) * results.get(j));
+							}							
+						}				
+					}
+					res = res/(double) doubleSystem.get(getElement(i,i));
+					results.set(i, res);
+				}
+				
+				// checking the error
+				
+				for(int i = 0; i < results.size(); i++) {
+					if(greattestDiff == null) {
+						greattestDiff = modulus(results.get(i) - initialAprox.get(i));
+					}else {
+						if(modulus((results.get(i) - initialAprox.get(i))) > greattestDiff) {
+							greattestDiff = results.get(i) - initialAprox.get(i);
+						}
+					}
+					
+					if(greattestElement == null || modulus(results.get(i)) > greattestElement) {
+						greattestElement = modulus(results.get(i));
+					}
+				}
+				
+				currentError = greattestDiff/(double) greattestElement;
+				
+				for(int i = 0; i < initialAprox.size(); i++) {
+					initialAprox.set(i, results.get(i));
+				}
+			}while( currentError > error);
+		}else {
+			System.out.println("This method does not work for this linear system, use the Gauss Elimination instead!");
+		}
+		
+		return results;
+	}
+	
+	
+	
 	public int getElement(int line, int column) {
 		if(line >= getNumberOfVariables() || column > (getNumberOfVariables() + 1)) {
 			return -1;
@@ -183,7 +250,7 @@ public class LinearSystem {
 					sum = sum.sumFrac(system.get(getElement(i, j)));
 				}
 			}
-			if(sum.divFrac(system.get(getElement(i, i))).toDouble() >= 1) {
+			if(sum.divFrac(system.get(getElement(i, i))).toDouble() > 1) {
 				return false;
 			}
 		}
