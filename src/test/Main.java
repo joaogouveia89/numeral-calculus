@@ -38,18 +38,9 @@ public class Main {
 		
 		List<Double> results = system.gaussJacobi(0.05, initialAprox);
 		
-		for(Double d : results) {
-			System.out.println(d);
+		for(int i = 0; i < results.size(); i++) {
+			System.out.println(results.get(i));
 		}
-		
-		CartesianPoint p1 = new CartesianPoint(2, 3);
-		double dist = p1.distanceTo(new CartesianPoint(5, 12));
-		
-		System.out.println("dist = " + dist);
-		
-		HexaNumber b = new HexaNumber();
-		b.fromDecimal(1729);
-		System.out.println("b is " + b.getValue());
 	}
 
 }

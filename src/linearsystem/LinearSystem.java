@@ -91,8 +91,59 @@ public class LinearSystem {
 	
 	public List<Double> gaussJacobi(double error, List<Double> initialAprox){
 		List<Double> results = new ArrayList<Double>();
-		
-		
+		Double greattestDiff = null;
+		Double greattestElement = null;
+		double currentError;
+		if(divergenceCriterion()) {
+			for(Double d : initialAprox) {
+				results.add(d);
+			}
+			List<Double> doubleSystem = new ArrayList<Double>();
+			
+			for(Fraction f : system) {
+				doubleSystem.add(f.toDouble());
+			}
+			
+			
+			do {
+				greattestDiff = null;
+				greattestElement = null;
+				for(int i = 0 ; i < getNumberOfVariables(); i++) {
+					double res = doubleSystem.get(getElement(i, getNumberOfVariables()));
+					for(int j = 0; j <= getNumberOfVariables() - 1; j++) {
+						if(j != i) {
+							res = res - (doubleSystem.get(getElement(i, j)) * initialAprox.get(j));
+						}				
+					}
+					res = res/(double) doubleSystem.get(getElement(i,i));
+					results.set(i, res);
+				}
+				
+				// checking the error
+				
+				for(int i = 0; i < results.size(); i++) {
+					if(greattestDiff == null) {
+						greattestDiff = modulus(results.get(i) - initialAprox.get(i));
+					}else {
+						if(modulus((results.get(i) - initialAprox.get(i))) > greattestDiff) {
+							greattestDiff = results.get(i) - initialAprox.get(i);
+						}
+					}
+					
+					if(greattestElement == null || modulus(results.get(i)) > greattestElement) {
+						greattestElement = modulus(results.get(i));
+					}
+				}
+				
+				currentError = greattestDiff/(double) greattestElement;
+				
+				for(int i = 0; i < initialAprox.size(); i++) {
+					initialAprox.set(i, results.get(i));
+				}
+			}while( currentError > error);
+		}else {
+			System.out.println("This method does not work for this linear system, use the Gauss Elimination instead!");
+		}
 		
 		return results;
 	}
@@ -122,6 +173,29 @@ public class LinearSystem {
 		this.numberOfVariables = numberOfVariables;
 	}
 	
+	private boolean divergenceCriterion() {
+		Fraction sum = new Fraction(0);
+		for(int i = 0; i < getNumberOfVariables(); i++) {
+			sum.setNum(0);
+			sum.setDen(1);
+			for(int j = 0 ; j < getNumberOfVariables(); j++) {
+				if(i != j) {
+					sum = sum.sumFrac(system.get(getElement(i, j)));
+				}
+			}
+			if(sum.divFrac(system.get(getElement(i, i))).toDouble() >= 1) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
+	// helper functions
+	
+	double modulus(double n) {
+		if(n >= 0)
+			return n;
+		return n*(-1);
+	}
 	
 }
