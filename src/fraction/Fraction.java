@@ -80,6 +80,29 @@ public class Fraction {
 		return mulFrac(auxf);
 	}
 	
+	public void pow(int power) {
+		/**
+		 * 5th year of school lesson: 
+		 * PT: Todo numero diferente de zero, elevado a zero é igual a 1
+		 * EN: Any number different from zero, powered on zero results in 1
+		 */
+		if(power == 0) {
+			if(this.num != 0) {
+				this.num = 1;
+			}			
+			this.den = 1;
+			return;
+		}else if(power != 1) {
+			int oldNum = this.num;
+			int oldDen = this.den;
+			for(int i = 0; i < power-1; i++) {
+				this.num *= oldNum;
+				this.den *= oldDen;
+			}
+		}
+		
+	}
+	
 	/* ============================================================
 	 * ********************TRANSFORMATION**************************
 	 * ============================================================

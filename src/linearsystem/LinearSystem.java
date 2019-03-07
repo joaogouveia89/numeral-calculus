@@ -64,11 +64,8 @@ public class LinearSystem {
 									results.get(getNumberOfVariables() - j - 1));									
 					sum = sum.sumFrac(mult);
 					
-				}
-						
-			}
-			
-			
+				}						
+			}		
 			
 			sum.simplify();
 			
@@ -76,7 +73,6 @@ public class LinearSystem {
 					system.get(getElement(currentLine, getNumberOfVariables()))
 					.subFrac(sum)
 					.divFrac(system.get(getElement(currentLine, currentColumn)));
-			
 			res.simplify();
 			
 			results.add(res);

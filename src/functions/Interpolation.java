@@ -28,14 +28,15 @@ public class Interpolation {
 	public double linearSystem(double xPoint) {
 		double res = 0;
 		List<Fraction> system = new ArrayList<Fraction>();
-		
 		// Building the linear system
 		for(int i = 0; i < xValues.size(); i++) {
 			for(int j = 0; j <= degree; j++) {
-				system.add(new Fraction(
-						Math.pow(xValues.get(i), j)));
+				Fraction f = new Fraction(xValues.get(i));
+				f.pow(j);				
+				system.add(f);
 			}
-			system.add(new Fraction(yValues.get(i)));
+			Fraction f = new Fraction(yValues.get(i));
+			system.add(f);
 		}
 		
 		LinearSystem ls = new LinearSystem(system, degree+1);

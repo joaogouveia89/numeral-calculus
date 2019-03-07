@@ -27,7 +27,7 @@ public class Main {
 		
 		Interpolation interpolation = new Interpolation(x, y, 2);
 		
-		double val = interpolation.linearSystem(12.0);
+		double val = interpolation.linearSystem(1.0);
 		
 		System.out.println(val);
 	}
