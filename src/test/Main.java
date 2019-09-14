@@ -1,35 +1,22 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cartesian.CartesianPoint;
-import fraction.Fraction;
-import functions.Interpolation;
-import linearsystem.LinearSystem;
-import numeric_basis.BinaryNumber;
-import numeric_basis.HexaNumber;
-import numeric_basis.OctalNumber;
+import numeric_basis.NumericBase;
+import numeric_basis.NumericBase.Builder.NumericBaseException;
 
 public class Main {
+	
+	private static NumericBase nb = null;
 
-	public static void main(String[] args) {
-		List<Double> x = new ArrayList<>();
-		List<Double> y = new ArrayList<>();
-		
-		x.add(-1.0);
-		x.add(0.0);
-		x.add(2.0);
-		
-		y.add(4.0);
-		y.add(1.0);
-		y.add(-1.0);
-		
-		Interpolation interpolation = new Interpolation(x, y, 2);
-		
-		double val = interpolation.linearSystem(1.0);
-		
-		System.out.println(val);
+	public static void main(String[] args){
+		try {
+			nb = new NumericBase.Builder()
+					.setInputBase(NumericBase.BINARY)
+					.setNumber("111001")
+					.build();
+			System.out.println(nb.getConversion(NumericBase.DECIMAL));
+		}catch(NumericBaseException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 }
