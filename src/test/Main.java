@@ -11,7 +11,7 @@ public class Main {
 		try {
 			nb = new NumericBase.Builder()
 					.setInputBase(NumericBase.BINARY)
-					.setNumber("111001")
+					.setNumber("11")
 					.build();
 			System.out.println(nb.getConversion(NumericBase.DECIMAL));
 		}catch(NumericBaseException e) {

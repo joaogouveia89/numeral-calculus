@@ -27,12 +27,11 @@ public class NumericBase {
 	public static class Builder {
 		private int base = DECIMAL;
 		private String input;
-		private int asciiFirst = 48;
+		/* Decimal is added on build logic */
 		private List<Integer> outputBases = new ArrayList<Integer>() {
 			{
 				add(BINARY);
 				add(OCTAL);
-				add(DECIMAL);
 				add(HEXADECIMAL);
 			}		
 		};
@@ -43,7 +42,7 @@ public class NumericBase {
 			return this;
 		}
 		
-		public Builder setNumber(String input) {
+		public Builder setNumber(String input){
 			this.input = input;
 			return this;
 		}
@@ -53,9 +52,26 @@ public class NumericBase {
 			return this;
 		}
 		
+		private char getNumberChar(int n) {
+			char c;
+			if(n >= 0 && n < 10) {
+				c = (char)(n + 48);
+			}else {
+				n -= 10;
+				c = (char)(n + 65);
+			}			
+			return c;
+		}
+		
+		private boolean ownsToPossibleCharactersSet(char c) {
+			int characterInt = (int) c;
+			return (base < 11 && characterInt > 47 && characterInt < (48 + base)) ||
+					(base > 10 && characterInt > 47 && characterInt < 58 || base > 10 && characterInt > 64 && characterInt < (65 + base - 10));
+		}
+		
 		private boolean isValid() {
 			for(int i = 0; i < input.length(); i++) {
-				if((int)input.charAt(i) < asciiFirst || (int)input.charAt(i) > (asciiFirst + base - 1))
+				if(!ownsToPossibleCharactersSet(input.charAt(i)))
 					return false;
 			}
 			return true;
@@ -69,6 +85,16 @@ public class NumericBase {
 			return Integer.toString(decimal);
 		}
 		
+		private String fromDecimal(int desiredBase, String dec) {
+			int num = Integer.parseInt(dec);
+			String result = "";
+			while(num != 0) {
+				result = getNumberChar((num%desiredBase)) + result;
+				num /= desiredBase;
+			}
+			return result;
+		}
+		
 		public NumericBase build() throws NumericBaseException {
 			if(!isValid()) {
 				throw new NumericBaseException(NumericBaseException.INVALID_INPUT_FOR_BASE);
@@ -77,6 +103,11 @@ public class NumericBase {
 			nb.conversions.put(this.base, this.input);
 			if(base != DECIMAL) {
 				nb.conversions.put(DECIMAL, toDecimal());
+			}
+			for(int i = 0; i < outputBases.size(); i++) {
+				if(outputBases.get(i) != base) {
+					nb.conversions.put(outputBases.get(i), fromDecimal(outputBases.get(i), nb.conversions.get(DECIMAL)));
+				}
 			}
 			return nb;
 		}
